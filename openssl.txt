@@ -1,0 +1,24 @@
+# 1. Generate private key
+openssl genpkey -algorithm RSA -out private_key.pem -pkeyopt rsa_keygen_bits:2048
+openssl rsa -in private_key.pem -noout -text
+
+# 2. Extract public key
+openssl pkey -in private_key.pem -pubout -out public_key.pem
+
+# 3. Put "hello" in a file
+echo -n "hello" > message.txt
+
+# 4. Encrypt with public key
+openssl pkeyutl -encrypt -inkey public_key.pem -pubin -in message.txt -out message.enc
+
+# 5. Decrypt with private key
+openssl pkeyutl -decrypt -inkey private_key.pem -in message.enc -out message_decrypted.txt
+
+# 6. Show result
+cat message_decrypted.txt
+
+# 7. Generate SHA-256 hash of a file
+openssl dgst -sha256 message.txt
+
+# 8. Request for contents of the CSR
+openssl req -in name_of_csr -noout -text
